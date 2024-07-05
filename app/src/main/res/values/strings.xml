@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">O2OWeather</string>
+    <string name="city_name_hint">Enter city name</string>
+    <string name="get_weather_btn">Get Weather</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="forecast">Forecast</string>
+    <string name="date">Date</string>
+    <string name="weather_icon">Weather Icon</string>
+    <string name="description">Description</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="windSpeed">Wind Speed</string>
+    <string name="minTemp">Min Temp</string>
+    <string name="maxTemp">Max Temp</string>
+</resources>

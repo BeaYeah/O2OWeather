@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">O2OWeather</string>
+    <string name="city_name_hint">Ingresa el nombre de la ciudad</string>
+    <string name="get_weather_btn">Obtener Clima</string>
+    <string name="current_weather">Clima Actual</string>
+    <string name="forecast">Pronóstico</string>
+    <string name="date">Fecha</string>
+    <string name="weather_icon">Icono del Clima</string>
+    <string name="description">Descripción</string>
+    <string name="temperature">Temperatura</string>
+    <string name="humidity">Humedad</string>
+    <string name="windSpeed">Velocidad del Viento</string>
+    <string name="minTemp">Temperatura Mínima</string>
+    <string name="maxTemp">Temperatura Máxima</string>
+</resources>
