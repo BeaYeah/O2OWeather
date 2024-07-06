@@ -13,4 +13,6 @@
     <string name="windSpeed">Velocidad del Viento</string>
     <string name="minTemp">Min</string>
     <string name="maxTemp">Max</string>
+    <string name="city_not_found">Ciudad no encontrada</string>
+    <string name="no_internet_connection">No hay conexión a internet</string>
 </resources>

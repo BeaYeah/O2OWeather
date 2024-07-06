@@ -13,4 +13,6 @@
     <string name="windSpeed">Wind Speed</string>
     <string name="minTemp">Min Temp</string>
     <string name="maxTemp">Max Temp</string>
+    <string name="city_not_found">City not Found</string>
+    <string name="no_internet_connection">No internet connection</string>
 </resources>
