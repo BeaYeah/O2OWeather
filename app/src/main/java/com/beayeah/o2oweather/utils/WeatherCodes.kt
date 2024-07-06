@@ -1,6 +1,13 @@
 package com.beayeah.o2oweather.utils
 
+/**
+ * Utility object for mapping weather codes to descriptive strings.
+ *
+ * Provides a method to retrieve weather descriptions based on specific weather codes.
+ */
 object WeatherCodes {
+
+    // Map of weather codes to corresponding weather descriptions
     private val WWO_CODE = mapOf(
         "113" to "Sunny",
         "116" to "PartlyCloudy",
@@ -52,6 +59,12 @@ object WeatherCodes {
         "395" to "HeavySnowShowers"
     )
 
+    /**
+     * Retrieves the weather description for a given weather code.
+     *
+     * @param code The weather code to retrieve the description for.
+     * @return The corresponding weather description or "Unknown Weather Code" if the code is not found.
+     */
     fun getDescription(code: String): String {
         return WWO_CODE[code]?.lowercase() ?: "Unknown Weather Code"
     }
