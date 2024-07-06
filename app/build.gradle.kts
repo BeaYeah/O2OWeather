@@ -73,17 +73,18 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Testing dependencies
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    testImplementation("org.mockito:mockito-core:5.12.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
-    testImplementation("androidx.test.ext:junit:1.1.3")
-    testImplementation("androidx.test:core:1.4.0")
-    testImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
-    kaptTest("com.google.dagger:hilt-android-compiler:2.48")
-    kapt("com.google.dagger:hilt-android-testing:2.48")
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.androidx.runner.v140)
+    testImplementation (libs.robolectric)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
+    kapt(libs.hilt.android.testing)
 }
 
 kapt {

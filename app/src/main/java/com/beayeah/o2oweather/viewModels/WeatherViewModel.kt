@@ -31,7 +31,7 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _weatherData = MutableStateFlow<WeatherState>(WeatherState.Idle)
-    val weatherData: StateFlow<WeatherState> = _weatherData
+    var weatherData: StateFlow<WeatherState> = _weatherData
 
     /**
      * Initiates a weather data fetch for the provided city.
