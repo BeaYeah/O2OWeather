@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -37,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,6 +50,7 @@ import com.beayeah.o2oweather.ui.theme.semiTransparentWhite
 import com.beayeah.o2oweather.utils.Utils.getWeatherIcon
 import com.beayeah.o2oweather.viewModels.WeatherState
 import com.beayeah.o2oweather.viewModels.WeatherViewModel
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +77,6 @@ fun WeatherApp(viewModel: WeatherViewModel = hiltViewModel()) {
                     TopAppBar(
                         title = {
                             Text(stringResource(id = R.string.app_name))
-
                         },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = semiTransparentWhite)
                     )
@@ -91,6 +94,8 @@ fun WeatherApp(viewModel: WeatherViewModel = hiltViewModel()) {
                             onValueChange = {
                                 city = it
                                 isCityEmpty = it.isEmpty()
+                                // Clear weather state when city text changes
+                                viewModel.clearWeather()
                             },
                             singleLine = true,
                             modifier = Modifier
@@ -125,14 +130,25 @@ fun WeatherApp(viewModel: WeatherViewModel = hiltViewModel()) {
                             Text(stringResource(id = R.string.get_weather_btn))
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
+                        // Use collectAsState to observe changes in weatherData
                         val weatherState by viewModel.weatherData.collectAsState()
 
+                        // Display content based on weatherState
                         when (weatherState) {
                             is WeatherState.Idle -> Text("")
                             is WeatherState.Loading -> CircularProgressIndicator()
-                            is WeatherState.Success -> WeatherDisplay((weatherState as WeatherState.Success).weatherData)
+                            is WeatherState.Success -> {
+                                // Only show WeatherDisplay if city is not empty
+                                if (city.isNotEmpty()) {
+                                    WeatherDisplay(
+                                        (weatherState as WeatherState.Success).weatherData,
+                                        city
+                                    )
+                                }
+                            }
+
                             is WeatherState.Error -> Text("Error: ${(weatherState as WeatherState.Error).message}")
                         }
                     }
@@ -143,7 +159,7 @@ fun WeatherApp(viewModel: WeatherViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun WeatherDisplay(weatherData: WeatherData) {
+fun WeatherDisplay(weatherData: WeatherData, city: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = stringResource(id = R.string.current_weather),
@@ -151,7 +167,7 @@ fun WeatherDisplay(weatherData: WeatherData) {
             fontSize = 20.sp,
             modifier = Modifier.padding(8.dp)
         )
-        WeatherCard(weatherData)
+        WeatherCard(weatherData, city)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -162,59 +178,91 @@ fun WeatherDisplay(weatherData: WeatherData) {
             modifier = Modifier.padding(8.dp)
         )
 
-        weatherData.weather.forEach { forecast ->
-            ForecastCard(forecast)
-            Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(1.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            weatherData.weather.forEach { forecast ->
+                ForecastCard(forecast)
+                Spacer(modifier = Modifier.height(5.dp))
+            }
         }
     }
 }
 
 @Composable
-fun WeatherCard(weatherData: WeatherData) {
+fun WeatherCard(weatherData: WeatherData, city: String) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(16.dp),
         colors = CardDefaults.cardColors(containerColor = semiTransparentWhite)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(id = R.string.date) + ": ${weatherData.currentCondition[0].observationTime}")
+            // Image on the left side
             val weatherIcon = getWeatherIcon(weatherData.currentCondition[0].weatherCode)
             Image(
                 painter = painterResource(id = weatherIcon),
                 contentDescription = stringResource(id = R.string.weather_icon),
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(70.dp)
             )
-            Text(text = stringResource(id = R.string.description) + ": ${weatherData.currentCondition[0].weatherDescription[0]}")
-            Text(text = stringResource(id = R.string.temperature) + ": ${weatherData.currentCondition[0].tempC}°C")
-            Text(text = stringResource(id = R.string.humidity) + ": ${weatherData.currentCondition[0].humidity}%")
-            Text(text = stringResource(id = R.string.windSpeed) + ": ${weatherData.currentCondition[0].windSpeedKmph} km/h")
+
+            // Spacer to create gap between image and text
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Column for text content aligned to the left
+            Column(
+                modifier = Modifier.align(Alignment.CenterVertically)
+            ) {
+                // First text aligned to the left of the image
+                Text(
+                    text = city.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + " - " + weatherData.currentCondition[0].observationTime,
+                    textAlign = TextAlign.Left
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Column {
+                Text(text = weatherData.currentCondition[0].weatherDescription[0].value)
+                Text(text = stringResource(id = R.string.temperature) + ": ${weatherData.currentCondition[0].tempC}°C")
+                Text(text = stringResource(id = R.string.humidity) + ": ${weatherData.currentCondition[0].humidity}%")
+                Text(text = stringResource(id = R.string.windSpeed) + ": ${weatherData.currentCondition[0].windSpeedKmph} km/h")
+            }
         }
     }
 }
+
 
 @Composable
 fun ForecastCard(forecast: ForecastWeather) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(5.dp),
         colors = CardDefaults.cardColors(containerColor = semiTransparentWhite)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.date) + ": ${forecast.date}")
-            Text(text = stringResource(id = R.string.minTemp) + "Min Temp: ${forecast.minTempC}°C")
-            Text(text = stringResource(id = R.string.maxTemp) + "Max Temp: ${forecast.maxTempC}°C")
+            Text(text = forecast.getFormattedDate())
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(text = stringResource(id = R.string.minTemp) + ": ${forecast.minTempC}°C")
+            Text(text = stringResource(id = R.string.maxTemp) + ": ${forecast.maxTempC}°C")
         }
     }
 }
+

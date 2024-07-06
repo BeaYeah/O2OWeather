@@ -11,6 +11,6 @@
     <string name="temperature">Temperatura</string>
     <string name="humidity">Humedad</string>
     <string name="windSpeed">Velocidad del Viento</string>
-    <string name="minTemp">Temperatura Mínima</string>
-    <string name="maxTemp">Temperatura Máxima</string>
+    <string name="minTemp">Min</string>
+    <string name="maxTemp">Max</string>
 </resources>

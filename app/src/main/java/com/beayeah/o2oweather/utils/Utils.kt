@@ -5,13 +5,13 @@ import com.beayeah.o2oweather.R
 object Utils {
     fun getWeatherIcon(description: String): Int {
         return when {
-            "sunny" in description.lowercase() -> R.drawable.sun
-            "cloudy" in description.lowercase() -> R.drawable.cloudy
-            "fog" in description.lowercase() -> R.drawable.fog
-            "showers" in description.lowercase() -> R.drawable.rain
-            "thundery" in description.lowercase() -> R.drawable.thunder
-            "snow" in description.lowercase() -> R.drawable.snow
-            "rain" in description.lowercase() -> R.drawable.rain
+            "sunny" in WeatherCodes.getDescription(description) -> R.drawable.sun
+            "cloudy" in WeatherCodes.getDescription(description) -> R.drawable.cloudy
+            "fog" in WeatherCodes.getDescription(description) -> R.drawable.fog
+            "showers" in WeatherCodes.getDescription(description) -> R.drawable.rain
+            "thundery" in WeatherCodes.getDescription(description) -> R.drawable.thunder
+            "snow" in WeatherCodes.getDescription(description) -> R.drawable.snow
+            "rain" in WeatherCodes.getDescription(description) -> R.drawable.rain
             else -> R.drawable.sun
         }
     }

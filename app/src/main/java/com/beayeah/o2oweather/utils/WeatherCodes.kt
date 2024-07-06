@@ -53,6 +53,6 @@ object WeatherCodes {
     )
 
     fun getDescription(code: String): String {
-        return WWO_CODE[code] ?: "Unknown Weather Code"
+        return WWO_CODE[code]?.lowercase() ?: "Unknown Weather Code"
     }
 }

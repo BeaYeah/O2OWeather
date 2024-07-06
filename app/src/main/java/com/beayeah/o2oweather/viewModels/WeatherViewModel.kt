@@ -43,6 +43,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
+    fun clearWeather() {
+        _weatherData.value = WeatherState.Idle
+    }
+
     private fun handleWeatherError(exception: Throwable?): WeatherState {
         return when (exception) {
             is HttpException -> {
